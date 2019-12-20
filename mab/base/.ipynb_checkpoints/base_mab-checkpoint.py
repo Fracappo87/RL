@@ -15,7 +15,7 @@ class MultiArmedBanditProblem(ABC):
         
         self.number_of_selections = np.zeros(self.number_of_arms)
         
-        self.selected_arms = np.zeros(number_of_trials)
+        self.selected_arms = np.zeros(len(number_of_trials))
         
     @abstractclassmethod
     def warm_up(self):
@@ -33,4 +33,4 @@ class MultiArmedBanditProblem(ABC):
         return np.argwhere(array==array.max()).ravel()[0]
     
     def compute_step_cumulative_reward(self, data):
-        return np.cumsum([data[step,int(self.selected_arms[step])] for step in range(self.number_of_trials)])
+        return np.cumsum([data[step,self.selected_arms[step]] for step in range(self.number_of_trials)])

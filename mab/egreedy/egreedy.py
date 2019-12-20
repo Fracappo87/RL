@@ -28,7 +28,7 @@ class BernoulliEGreedy(MultiArmedBanditProblem):
         self.arms_average_rewards = self.init_probas
         
     def run_single_step(self,step,data):
-        if self.random_states(step) < self.epsilon:
+        if self.random_states[step] < self.epsilon:
             selected_arm = np.random.randint(0,self.number_of_arms)
         else:
             selected_arm = self.get_max_index(self.arms_average_rewards)
@@ -37,7 +37,7 @@ class BernoulliEGreedy(MultiArmedBanditProblem):
         self.number_of_selections[selected_arm] += 1
         self.arms_average_rewards[selected_arm] += 1./self.number_of_selections[selected_arm]*(data[step,selected_arm]-self.arms_average_rewards[selected_arm])
         
-    def run_experiment(self,seed,data,batch_size=100):
+    def run_experiment(self,seed,data):
         
         self.warm_up(seed)
         
