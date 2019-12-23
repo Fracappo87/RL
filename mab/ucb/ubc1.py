@@ -3,7 +3,7 @@ import numpy as np
 from mab.base.base_mab import MultiArmedBanditProblem
 
 
-class BernoulliArmedBanditUCB(MultiArmedBanditProblem):
+class BernoulliUCB(MultiArmedBanditProblem):
 
     def warm_up(self,data):
         self.arms_cumulative_rewards = np.zeros(self.number_of_arms)
