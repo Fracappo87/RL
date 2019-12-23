@@ -1,5 +1,7 @@
 import numpy as np
 
+from scipy.stats import beta
+
 import matplotlib.pyplot as plt
 
 def plot_ucb_evolution(ucb_learner,interval=20,ncols=5):
@@ -36,6 +38,36 @@ def plot_ucb_evolution(ucb_learner,interval=20,ncols=5):
             ax.plot(xpoints[np.argmax(rewards+deltas)]+0.4,(rewards+deltas).max(),marker='o',markersize=6,color='k',label='Max UCB '+str(round((rewards+deltas).max(),3)))
             ax.legend()
             ax.set_title('{} iterations'.format(step*interval),)
+            step+=1
+        plt.tight_layout()
+        plt.show()
+        
+def plot_ts_evolution(ts_learner,interval=20,ncols=5):
+    
+    nplots = ts_learner.number_of_trials//interval
+    nrows=nplots//ncols
+    step=0
+    npoints=100
+    for row in range(nrows):
+        fig, list_of_axes = plt.subplots(1,ncols,figsize=(30,6))
+        xlabels = ['bandit_{}'.format(index) for index in range(1,ts_learner.number_of_arms+1)]
+
+        for col in range(ncols):
+            
+            alphas = ts_learner.step_alphas[step*interval,:]
+            betas = ts_learner.step_betas[step*interval,:]
+            
+            ax=list_of_axes[col]
+            for a,b,label in zip(alphas,betas,xlabels):
+                x = np.linspace(beta.ppf(0.01, a, b), beta.ppf(0.99, a, b), npoints)
+                curve = beta.pdf(x, a, b)
+                ax.plot(x, curve, lw=2, label=label)
+                ax.fill_between(x, [curve.min()]*npoints, beta.pdf(x, a, b), alpha=0.2)
+                ax.set_ylabel('P(reward)',fontsize=14)
+                ax.set_xlabel('reward',fontsize=14)
+
+            ax.legend(fontsize=12)
+            ax.set_title('{} iterations'.format(step*interval),fontsize=20)
             step+=1
         plt.tight_layout()
         plt.show()

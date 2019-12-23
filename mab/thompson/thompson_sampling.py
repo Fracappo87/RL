@@ -33,7 +33,9 @@ class BernoulliTS(MultiArmedBanditProblem):
         
         self.step_alphas[step] = self.alphas
         self.step_betas[step] = self.betas
-         
+        
+        self.arms_average_rewards[step] = self.step_alphas[step]/(self.step_alphas[step]+self.step_betas[step] )
+        
     def run_experiment(self,seed,data):
         
         self.warm_up(seed)
@@ -41,3 +43,4 @@ class BernoulliTS(MultiArmedBanditProblem):
         for step in range(self.number_of_trials):
             self.run_single_step(step,data)
             
+        
