@@ -19,7 +19,7 @@ class BernoulliEGreedy(MultiArmedBanditProblem):
             raise ValueError('Prior success rates for each arm have to be bound within 0 and 1')
         
         self.epsilon = epsilon
-        self.init_probas = init_probas
+        self.init_probas = init_probas.copy()
         
     def warm_up(self,seed):
         np.random.seed(seed)

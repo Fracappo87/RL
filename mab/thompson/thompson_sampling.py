@@ -13,8 +13,8 @@ class BernoulliTS(MultiArmedBanditProblem):
         elif len(prior_alphas)!=len(prior_betas)!=number_of_arms:
             raise ValueError('Prior alpha and beta vectors must have the same length')
             
-        self.alphas = prior_alphas
-        self.betas = prior_betas
+        self.alphas = prior_alphas.copy()
+        self.betas = prior_betas.copy()
         
     def warm_up(self,seed):
         np.random.seed(seed)
@@ -33,9 +33,7 @@ class BernoulliTS(MultiArmedBanditProblem):
         
         self.step_alphas[step] = self.alphas
         self.step_betas[step] = self.betas
-        
-        self.arms_average_rewards[step] = self.step_alphas[step]/(self.step_alphas[step]+self.step_betas[step] )
-        
+         
     def run_experiment(self,seed,data):
         
         self.warm_up(seed)
@@ -43,4 +41,4 @@ class BernoulliTS(MultiArmedBanditProblem):
         for step in range(self.number_of_trials):
             self.run_single_step(step,data)
             
-        
+            
